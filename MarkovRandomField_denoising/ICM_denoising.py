@@ -6,18 +6,6 @@ import os
 import pdb
 
 
-def main():
-  parser = argparse.ArgumentParser()
-  parser.add_argument("--image", type=str, default="data/lennab.jpg",
-                      help="Name of the noisy image")
-  parser.add_argument("--iter", type=int, default=10,
-                      help="Number of iterations for ICM")
-  parser.add_argument("--beta", type=float, default=0.3,
-                      help="Value of regularisation")
-  args = parser.parse_args()
-  sys.stdout.write(str(ICM(args)))
-
-
 def pad(img):
   h, w = img.shape
   eximg = np.zeros((h+2, w+2))
@@ -29,8 +17,8 @@ def pad(img):
   return eximg
 
 
-# potential fonction corresponding to a gaussian markovian model (quadratic function)
 def get_cost(i, j, eximg, x, weights):
+  # potential fonction corresponding to a gaussian markovian model (quadratic function)
   if np.isscalar(x):
     return np.sum(weights * (eximg[i-1:i+2, j-1:j+2] - x)**2)
   else:
@@ -38,8 +26,8 @@ def get_cost(i, j, eximg, x, weights):
     return tmp.sum(axis=tuple(range(1, tmp.ndim)))
 
 
-# ICM : Iterated conditional mode algorithme
 def ICM(args):
+  # ICM : Iterated conditional mode algorithme
   NoisyIm = cv2.imread(args.image, 0)
   NoisyIm = NoisyIm.astype(float)
   height, width = NoisyIm.shape
@@ -70,6 +58,18 @@ def ICM(args):
     NoisyIm = eximg[1:-1, 1:-1]
     cv2.imwrite("data/iter_" + str(iter+1) + "_denoised_" +
                 os.path.basename(args.image), NoisyIm)
+
+    
+def main():
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--image", type=str, default="data/lennab.jpg",
+                      help="Name of the noisy image")
+  parser.add_argument("--iter", type=int, default=3,
+                      help="Number of iterations for ICM")
+  parser.add_argument("--beta", type=float, default=0.3,
+                      help="Value of regularisation")
+  args = parser.parse_args()
+  sys.stdout.write(str(ICM(args)))
 
 
 if __name__ == '__main__':
