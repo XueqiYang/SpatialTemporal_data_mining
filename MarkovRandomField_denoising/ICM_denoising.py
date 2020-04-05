@@ -49,7 +49,7 @@ def ICM(args):
     print("iteration {}\n".format(iter+1))
     for i in range(1, height+1):
       for j in range(1, width+1):
-        # We work in 4-connexity here
+        # We work in 4 neighborhood system
         # Every shade of gray is tested to find the a local minimum of the energie corresponding to a Gibbs distribution
         costs = get_cost(i, j, eximg, xs, weights)
         xmin = np.argmin(costs)
