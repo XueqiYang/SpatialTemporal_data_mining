@@ -49,8 +49,8 @@ def ICM(args):
     print("iteration {}\n".format(iter+1))
     for i in range(1, height+1):
       for j in range(1, width+1):
-        # We work in 4 neighborhood system
-        # Every shade of gray is tested to find the a local minimum of the energie corresponding to a Gibbs distribution
+        # 4-neighborhood system
+        # Find the a local minimum of the COST corresponding to a Gibbs distribution
         costs = get_cost(i, j, eximg, xs, weights)
         xmin = np.argmin(costs)
         # NoisyIm[i-1][j-1] = xmin
