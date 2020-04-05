@@ -36,12 +36,12 @@ def ICM(args):
   beta = args.beta
   alpha = 1./(2.0*sigma2)
 
-  # create weights
+  # weight metrics
   weights = np.array([[0, beta, 0],
                       [beta, alpha, beta],
                       [0, beta, 0]])
 
-  # Number of iterations : each new image is used as the new restored image
+  # Each new image is used as the new reconstruction
   xs = np.arange(256)
   xs = xs[..., np.newaxis, np.newaxis]
   for iter in range(args.iter):
@@ -53,7 +53,6 @@ def ICM(args):
         # Find the a local minimum of the COST corresponding to a Gibbs distribution
         costs = get_cost(i, j, eximg, xs, weights)
         xmin = np.argmin(costs)
-        # NoisyIm[i-1][j-1] = xmin
         eximg[i][j] = xmin
     NoisyIm = eximg[1:-1, 1:-1]
     cv2.imwrite("data/iter_" + str(iter+1) + "_denoised_" +
